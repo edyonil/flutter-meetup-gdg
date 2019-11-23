@@ -1,7 +1,8 @@
+import 'package:flutter_meetup/bloc/bloc_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-class IncrementBloc {
+class IncrementBloc extends BlocBase {
 
   BehaviorSubject<int> behaviorSubject = BehaviorSubject<int>();
 

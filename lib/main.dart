@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meetup/bloc/bloc_provider.dart';
 import 'dart:async';
 
 import 'package:flutter_meetup/bloc/increment.bloc.dart';
 
-void main() => runApp(MyApp());
+import 'increment.dart';
+
+void main() => runApp(
+  BlocProvider<IncrementBloc>(
+        bloc: IncrementBloc(),
+        child: MyApp(),
+      ),
+
+);
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -23,7 +32,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page')
     );
   }
 }
@@ -48,32 +57,41 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  final IncrementBloc _incrementBloc = IncrementBloc();
-
-  @override
-  void dispose(){
-    this._incrementBloc.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     print("Resolvido o rebuild");
     return Scaffold(
-      appBar: AppBar(title: Text('Stream version of the Counter App')),
+      appBar: AppBar(title: Text('Bloc')),
       body: Center(
         child: StreamBuilder<int>(
-          stream: _incrementBloc.incrementValueStream,
+          stream: BlocProvider.of<IncrementBloc>(context).incrementValueStream,
           initialData: 0,
           builder: (BuildContext context, AsyncSnapshot<int> snapshot){
-            return Text('You hit me: ${snapshot.data} times');
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '${snapshot.data}',
+              style: Theme.of(context).textTheme.display1,
+            ),
+            RaisedButton(
+              child: Text("Outra tela"),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Increment()));
+              },
+            )
+              ],
+            );
           }
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: (){
-          this._incrementBloc.incrementeValue();
+          BlocProvider.of<IncrementBloc>(context).incrementeValue();
         },
       ),
     );
