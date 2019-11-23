@@ -56,8 +56,9 @@ int _counter = 0;
 
   @override
   Widget build(BuildContext context) {
+    print("");
     return Scaffold(
-      appBar: AppBar(title: Text('Stream version of the Counter App')),
+      appBar: AppBar(title: Text('Stream')),
       body: Center(
         child: StreamBuilder<int>(
           stream: _streamController.stream,
