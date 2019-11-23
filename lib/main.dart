@@ -71,7 +71,7 @@ int _counter = 0;
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '${snapshot.data}',
               style: Theme.of(context).textTheme.display1,
             ),
               ],
