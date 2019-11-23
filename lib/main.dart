@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 void main() => runApp(MyApp());
 
@@ -44,45 +45,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+int _counter = 0;
+  final StreamController<int> _streamController = StreamController<int>();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void dispose(){
+    _streamController.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Vou refazer a build");
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text('Stream version of the Counter App')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
+        child: StreamBuilder<int>(
+          stream: _streamController.stream,
+          initialData: _counter,
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot){
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
               'You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
-          ],
+              ],
+            );
+          }
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        child: const Icon(Icons.add),
+        onPressed: (){
+          _streamController.sink.add(++_counter);
+        },
+      ),
     );
   }
 }
