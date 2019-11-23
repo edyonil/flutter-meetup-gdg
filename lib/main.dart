@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Vou refazer a build");
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("State"),
       ),
       body: Center(
         child: Column(
